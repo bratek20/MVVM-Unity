@@ -1,13 +1,37 @@
 using UnityEngine;
 using UnityWeld.Binding;
+using Zenject;
 
-public class View<TViewModel> : MonoBehaviour, IViewModelProvider
+public class View<TViewModel> : MonoBehaviour, IViewModelProvider where TViewModel : ViewModel
 {
     private TViewModel _viewModel;
+    private bool _callOnEnableAfterConstruct;
 
-    public void Setup(TViewModel viewModel)
+    [Inject]
+    private void Construct(TViewModel viewModel)
     {
         _viewModel = viewModel;
+
+        if (_callOnEnableAfterConstruct)
+        {
+            OnEnable();
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (_viewModel == null)
+        {
+            _callOnEnableAfterConstruct = true;
+            return;
+        }
+
+        _viewModel.AttachEvents();    
+    }
+
+    private void OnDisable()
+    {
+        _viewModel.DetachEvents();
     }
 
     public object GetViewModel()

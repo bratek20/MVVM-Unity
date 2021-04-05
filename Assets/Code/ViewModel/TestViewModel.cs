@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 using UnityWeld.Binding;
 
 [Binding]
@@ -10,7 +9,16 @@ public class TestViewModel : ViewModel
     public TestViewModel(IQuoteSource quoteSource)
     {
         _quoteSource = quoteSource;
+    }
+
+    public override void AttachEvents()
+    {
         _quoteSource.QuoteArrived += OnQuoteArrived;
+    }
+
+    public override void DetachEvents()
+    {
+        _quoteSource.QuoteArrived -= OnQuoteArrived;
     }
 
     [Binding]

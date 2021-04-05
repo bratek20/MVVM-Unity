@@ -8,4 +8,7 @@ public class ViewModel : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    public virtual void AttachEvents() { }
+    public virtual void DetachEvents() { }
 }
